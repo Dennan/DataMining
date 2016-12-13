@@ -2,7 +2,7 @@
 
 import praw
 import time
-from datetime import datetime, date, timedelta
+from datetime import date
 
 class CommentFetcher :
     def __init__(self):
