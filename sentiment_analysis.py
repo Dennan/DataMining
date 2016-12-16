@@ -14,11 +14,13 @@ training data set.
 
 import nltk
 
+
 class SentimentAnalysis :
 
     WORD_LENGTH_THRESHOLD = 3
 
     def __init__(self):
+        print("Downloading required nltk dependencies...")
         nltk.download('punkt')
 
     def train(self):
@@ -41,15 +43,45 @@ class SentimentAnalysis :
             words = [word.lower() for word in words.split() if len(word) >= self.WORD_LENGTH_THRESHOLD]
             word_lists.append((words, 'negative'))
 
-        all_words = set(word.lower() for statement in positive_examples for word in nltk.tokenize.word_tokenize(statement))
 
-        print(all_words)
-        print(word_lists)
+        all_words = []
+        for tuple in word_lists :
+            all_words.extend(tuple[0])
 
+        all_words_dist = nltk.FreqDist(all_words)
+        self.features = list(all_words_dist.keys())
 
+        featuresets = []
+        for statement in positive_examples :
+            featuresets.append((self.get_features_in_statement(statement), "positive"))
+
+        for statement in negative_examples :
+            featuresets.append((self.get_features_in_statement(statement), "negative"))
+
+        self.classifier = nltk.NaiveBayesClassifier.train(featuresets)
+
+    def get_features_in_statement(self, statement):
+        word_set = set(statement.split())
+        features = {}
+
+        for word in self.features :
+            features[word] = (word in word_set)
+
+        return features
+
+    def classify(self, statement):
+        return self.classifier.classify(self.get_features_in_statement(statement))
 
 def main() :
-    SentimentAnalysis().train()
+    sa = SentimentAnalysis()
+    sa.train()
+
+    print("Testing classifier with sentence 'I love dogs'")
+    print(sa.classify("I love dogs"))
+
+    print("Testing classifier with sentence 'I hate dogs'")
+    print(sa.classify("I hate dogs"))
+
 
 if __name__ == "__main__" :
     main()
