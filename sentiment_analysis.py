@@ -15,6 +15,8 @@ training data set.
 import nltk
 import os
 import pickle
+from comment_fetcher import CommentFetcher
+from datetime import date
 
 class SentimentAnalysis :
 
@@ -24,9 +26,9 @@ class SentimentAnalysis :
         print("Downloading required nltk dependencies...")
         nltk.download('punkt')
 
-        if os.path.isfile('trained_classifier.pickle') :
+        if os.path.isfile('trained_bayesian_classifier.pickle') :
             print("Classifier already trained, loading file...")
-            file = open("trained_classifier.pickle", "rb")
+            file = open("trained_bayesian_classifier.pickle", "rb")
             self.classifier, self.features = pickle.load(file)
             file.close()
         else :
@@ -78,15 +80,32 @@ class SentimentAnalysis :
     def classify(self, statement):
         return self.classifier.classify(self.get_features_in_statement(statement))
 
+def create_training_files() :
+    cf = CommentFetcher()
+    start_date = date(2014, 1, 1)
+    end_date = date(2014, 4, 1)
+
+    comments = cf.get_posts_between('politics', start_date, end_date, 5, 'opinion')
+
+    pos_file = open("positive_training.txt", "a")
+    neg_file = open("negative_training.txt", "a")
+
+    for comment in comments :
+        print(comment)
+        choice = input("p, n or x(not applicable), q for quit(important if you want to save!)? : ")
+
+        if choice == 'p' :
+            pos_file.write(comment + "\n")
+        elif choice =='n' :
+            neg_file.write(comment + "\n")
+        elif choice == 'q' :
+            break
+
+    pos_file.close()
+    neg_file.close()
+
 def main() :
-    sa = SentimentAnalysis()
-
-    print("Testing classifier with sentence 'I love dogs'")
-    print(sa.classify("I love dogs"))
-
-    print("Testing classifier with sentence 'I hate dogs'")
-    print(sa.classify("I hate dogs"))
-
+    create_training_files()
 
 if __name__ == "__main__" :
     main()
