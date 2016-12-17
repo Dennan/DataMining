@@ -13,7 +13,8 @@ training data set.
 
 
 import nltk
-
+import os
+import pickle
 
 class SentimentAnalysis :
 
@@ -23,30 +24,35 @@ class SentimentAnalysis :
         print("Downloading required nltk dependencies...")
         nltk.download('punkt')
 
+        if os.path.isfile('trained_classifier.pickle') :
+            print("Classifier already trained, loading file...")
+            file = open("trained_classifier.pickle", "rb")
+            self.classifier, self.features = pickle.load(file)
+            file.close()
+        else :
+            print("No classifier file found, training classifier and saving...")
+            self.train()
+            file = open("trained_classifier.pickle", "wb")
+            pickle.dump((self.classifier, self.features), file)
+            file.close()
+
     def train(self):
-        positive_examples = ['I love this politician',
-                             'Everything is great',
-                             'I love everything']
+        positive_examples = []
+        negative_examples = []
+        positive_file = open("positive_training.txt", "r")
+        negative_file = open("negative_training.txt", "r")
 
-        negative_examples = ['I hate this politican',
-                             'Everything is terrible',
-                             'I hate everything']
+        for line in positive_file :
+            positive_examples.append(line.replace("\n", ""))
 
-        word_lists = []
-        # convert to lists of significant words
-
-        for words in positive_examples :
-            words = [word.lower() for word in words.split() if len(word) >= self.WORD_LENGTH_THRESHOLD]
-            word_lists.append((words, 'positive'))
-
-        for words in negative_examples :
-            words = [word.lower() for word in words.split() if len(word) >= self.WORD_LENGTH_THRESHOLD]
-            word_lists.append((words, 'negative'))
-
+        for line in negative_file :
+            negative_examples.append(line.replace("\n", ""))
 
         all_words = []
-        for tuple in word_lists :
-            all_words.extend(tuple[0])
+
+        for example in positive_examples + negative_examples :
+            words = [word.lower() for word in example.split() if len(word) >= self.WORD_LENGTH_THRESHOLD]
+            all_words.extend(words)
 
         all_words_dist = nltk.FreqDist(all_words)
         self.features = list(all_words_dist.keys())
@@ -74,7 +80,6 @@ class SentimentAnalysis :
 
 def main() :
     sa = SentimentAnalysis()
-    sa.train()
 
     print("Testing classifier with sentence 'I love dogs'")
     print(sa.classify("I love dogs"))
