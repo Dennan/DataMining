@@ -19,6 +19,7 @@ import pickle
 class SentimentAnalysis :
 
     WORD_LENGTH_THRESHOLD = 3
+    NEUTRAL_THRESHOLD = 0.1
 
     def __init__(self):
         print("Downloading required nltk dependencies...")
@@ -75,8 +76,16 @@ class SentimentAnalysis :
 
         return features
 
+    # returns strings "positive", "negative", or "neutral"
+    # note: "neutral" doesn't necessarily mean that the comment is neutral, it just means that
+    # we don't have enough information to classify it as either positive or negative
     def classify(self, statement):
-        return self.classifier.classify(self.get_features_in_statement(statement))
+        prob_dist = self.classifier.prob_classify(self.get_features_in_statement(statement))
+
+        if (abs(prob_dist.prob(prob_dist.max())) - 0.5 ) < self.NEUTRAL_THRESHOLD :
+            return "neutral"
+        else :
+            return self.classifier.classify(self.get_features_in_statement(statement))
 
 def main() :
     sa = SentimentAnalysis()
@@ -86,6 +95,14 @@ def main() :
 
     print("Testing classifier with sentence 'I hate dogs'")
     print(sa.classify("I hate dogs"))
+
+    print("Testing classifier with sentence 'omlettes'")
+    print(sa.classify("omlettes"))
+
+    print("Testing classifier with sentence 'I like dogs'")
+    print(sa.classify("I like dogs"))
+
+
 
 
 if __name__ == "__main__" :
