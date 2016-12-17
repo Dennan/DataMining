@@ -22,6 +22,7 @@ class SentimentAnalysis :
 
     WORD_LENGTH_THRESHOLD = 3
     NEUTRAL_THRESHOLD = 0.1
+    CLASSIFIER_FILE_NAME = "trained_bayesian_classifier.pickle"
 
     def __init__(self):
         print("Downloading required nltk dependencies...")
@@ -29,13 +30,13 @@ class SentimentAnalysis :
 
         if os.path.isfile('trained_bayesian_classifier.pickle') :
             print("Classifier already trained, loading file...")
-            file = open("trained_bayesian_classifier.pickle", "rb")
+            file = open(self.CLASSIFIER_FILE_NAME, "rb")
             self.classifier, self.features = pickle.load(file)
             file.close()
         else :
             print("No classifier file found, training classifier and saving...")
             self.train()
-            file = open("trained_bayesian_classifier.pickle", "wb")
+            file = open(self.CLASSIFIER_FILE_NAME, "wb")
             pickle.dump((self.classifier, self.features), file)
             file.close()
 
@@ -128,7 +129,11 @@ def main() :
     print("Testing classifier with sentence 'I like dogs'")
     print(sa.classify("I like dogs"))
 
-    create_training_files()
+    print("Testing classifier with sentence 'You mean like with a hydraulic press?'")
+    print(sa.classify("You mean like with a hydraulic press?"))
+
+    print("Hillary Clinton would be a great president")
+    print(sa.classify("Hillary Clinton would be a great president"))
 
 if __name__ == "__main__" :
     main()
