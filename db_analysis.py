@@ -17,7 +17,7 @@ def main() :
         print(result)
         if result == "positive" :
             trump_score = trump_score + 1
-        else :
+        elif result == "negative" :
             trump_score = trump_score - 1
 
     for comment in clinton_comments :
@@ -26,7 +26,7 @@ def main() :
         print(result)
         if result == "positive" :
             clinton_score = clinton_score + 1
-        else :
+        elif result == "negative" :
             clinton_score = clinton_score - 1
 
     if clinton_score > trump_score :
