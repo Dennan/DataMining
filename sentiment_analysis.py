@@ -35,7 +35,7 @@ class SentimentAnalysis :
         else :
             print("No classifier file found, training classifier and saving...")
             self.train()
-            file = open("trained_classifier.pickle", "wb")
+            file = open("trained_bayesian_classifier.pickle", "wb")
             pickle.dump((self.classifier, self.features), file)
             file.close()
 
