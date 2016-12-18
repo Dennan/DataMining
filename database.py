@@ -2,19 +2,13 @@ import pickledb
 from comment_fetcher import CommentFetcher
 from datetime import date
 
-CURRENT_DATA_VERSION = "0.01"
-
 class Database :
 
     def __init__(self, year1, month1, day1, year2, month2, day2, posts) :
         self.db = pickledb.load('comments.db', False)
-        if self.db.get("version") != CURRENT_DATA_VERSION :
-            self.setup_db(year1, month1, day1, year2, month2, day2, posts)
+        self.setup_db(year1, month1, day1, year2, month2, day2, posts)
 
     def setup_db(self, year1, month1, day1, year2, month2, day2, posts):
-        self.db.deldb()
-        self.db.set("version", CURRENT_DATA_VERSION)
-
         cf = CommentFetcher()
 
         trump_set_1 = cf.get_posts_between('politics', date(int(year1), int(month1), int(day1)), date(int(year2), int(month2), int(day2)), int(posts), "trump")
