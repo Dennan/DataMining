@@ -30,11 +30,11 @@ def main() :
             clinton_score = clinton_score - 1
 
     if clinton_score > trump_score :
-        print("Hilary Clinton has greater support than Donald Trump, at ",clinton_score," to ",trump_score,".")
+        print("Hillary Clinton has greater support than Donald Trump, at ",clinton_score," to ",trump_score,".")
     elif trump_score > clinton_score :
-        print("Donald Trump has greater support than Hilary Clinton, at ",trump_score," to ",clinton_score,".")
+        print("Donald Trump has greater support than Hillary Clinton, at ",trump_score," to ",clinton_score,".")
     else :
-        print("Hilary Clinton and Donald Trump have the same support, at ",clinton_score," and ",trump_score," each.")
+        print("Hillary Clinton and Donald Trump have the same support, at ",clinton_score," and ",trump_score," each.")
 
 if __name__ == "__main__" :
     main()
