@@ -6,23 +6,23 @@ CURRENT_DATA_VERSION = "0.01"
 
 class Database :
 
-    def __init__(self) :
+    def __init__(self, year1, month1, day1, year2, month2, day2, posts) :
         self.db = pickledb.load('comments.db', False)
         if self.db.get("version") != CURRENT_DATA_VERSION :
-            self.setup_db()
+            self.setup_db(year1, month1, day1, year2, month2, day2, posts)
 
-    def setup_db(self):
+    def setup_db(self, year1, month1, day1, year2, month2, day2, posts):
         self.db.deldb()
         self.db.set("version", CURRENT_DATA_VERSION)
 
         cf = CommentFetcher()
 
-        trump_set_1 = cf.get_posts_between('politics', date(2016, 10, 1), date(2016, 11, 1), 10, "trump")
-        clinton_set_1 = cf.get_posts_between('politics', date(2016, 10, 1), date(2016, 11, 1), 10, "clinton")
+        trump_set_1 = cf.get_posts_between('politics', date(int(year1), int(month1), int(day1)), date(int(year2), int(month2), int(day2)), int(posts), "trump")
+        clinton_set_1 = cf.get_posts_between('politics', date(int(year1), int(month1), int(day1)), date(int(year2), int(month2), int(day2)), int(posts), "clinton")
 
-        self.db.dcreate("2016-10-1-2016-11-1")
-        self.db.dadd("2016-10-1-2016-11-1", ("trump", trump_set_1))
-        self.db.dadd("2016-10-1-2016-11-1", ("clinton", clinton_set_1))
+        self.db.dcreate("{}-{}-{}-{}-{}-{}".format(year1, month1, day1, year2, month2, day2))
+        self.db.dadd("{}-{}-{}-{}-{}-{}".format(year1, month1, day1, year2, month2, day2), ("trump", trump_set_1))
+        self.db.dadd("{}-{}-{}-{}-{}-{}".format(year1, month1, day1, year2, month2, day2), ("clinton", clinton_set_1))
 
         self.db.dump()
 
