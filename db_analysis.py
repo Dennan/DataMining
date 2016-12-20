@@ -1,5 +1,6 @@
 from database import Database
 from sentiment_analysis import SentimentAnalysis
+import re
 
 class dbAnalysis :
     sa = SentimentAnalysis()
@@ -17,18 +18,30 @@ class dbAnalysis :
             result = self.sa.classify(comment)
             #print(result)
             if result == "positive" :
-                trump_score = trump_score + 1
+                if re.search(' /s ', comment, 0) == None :
+                    trump_score = trump_score + 1
+                else :
+                    trump_score = trump_score - 1
             elif result == "negative" :
-                trump_score = trump_score - 1
+                if re.search(' /s ', comment, 0) == None :
+                    trump_score = trump_score - 1
+                else :
+                    trump_score = trump_score + 1
 
         for comment in clinton_comments :
             #print("Testing classifier with sentence :", comment)
             result = self.sa.classify(comment)
             #print(result)
             if result == "positive" :
-                clinton_score = clinton_score + 1
+                if re.search('/s', comment, 0) == None :
+                    clinton_score = clinton_score + 1
+                else :
+                    clinton_score = clinton_score - 1
             elif result == "negative" :
-                clinton_score = clinton_score - 1
+                if re.search('/s', comment, 0) == None :
+                    clinton_score = clinton_score - 1
+                else :
+                    clinton_score = clinton_score + 1
 
         if clinton_score > trump_score :
             print("Hillary Clinton has greater support than Donald Trump, at {} to {}.\n".format(str(clinton_score), str(trump_score)))

@@ -59,7 +59,7 @@ class SentimentAnalysis :
             all_words.extend(words)
 
         all_words_dist = nltk.FreqDist(all_words)
-        self.features = list(all_words_dist.keys()[:2500])
+        self.features = list(all_words_dist.keys())[:2500]
 
         featuresets = []
         for statement in positive_examples :

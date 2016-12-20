@@ -22,7 +22,7 @@ def main() :
         dbAnalysis('2016', '5', '3', '2016', '5', '10', '5')
 
         print("When Clinton is named the Democratic Candidate: July 26, 2016")
-        dbAnalysis('2016', '7', '26', '2016', '7', '2', '5')
+        dbAnalysis('2016', '7', '26', '2016', '8', '2', '5')
 
         print("When Clinton makes a comment about \"Deplorables\": September 9, 2016")
         dbAnalysis('2016', '9', '9', '2016', '9', '16', '5')
