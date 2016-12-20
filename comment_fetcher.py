@@ -14,7 +14,7 @@ class CommentFetcher :
 
     # gets posts from a given subreddit between start_date and end_date
     def get_posts_between(self, subreddit, start_date, end_date, max_posts, keywords):
-        print("Fetching comments from {} submissions on /r/{} between {} and {}, with titles containing keywords [{}]\n".format(max_posts, subreddit, start_date, end_date, keywords))
+        #print("Fetching comments from {} submissions on /r/{} between {} and {}, with titles containing keywords [{}]\n".format(max_posts, subreddit, start_date, end_date, keywords))
 
         start_timestamp = time.mktime(start_date.timetuple())
         end_timestamp = time.mktime(end_date.timetuple())

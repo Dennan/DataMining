@@ -15,7 +15,7 @@ def main() :
         dbAnalysis(year1, month1, day1, year2, month2, day2, posts)
 
     else :
-        print("When Trump announces his candidacy for president: June 16, 2015")
+        print("\nWhen Trump announces his candidacy for president: June 16, 2015")
         dbAnalysis('2015', '6', '16', '2015', '6', '23', '5')
 
         print("When Trump is named the Republican Candidate: May 3, 2016")

@@ -28,7 +28,7 @@ class SentimentAnalysis :
         print("Downloading required nltk dependencies...")
         nltk.download('punkt')
 
-        if os.path.isfile('trained_bayesian_classifier.pickle') :
+        if os.path.isfile(CLASSIFIER_FILE_NAME) :
             print("Classifier already trained, loading file...")
             file = open(self.CLASSIFIER_FILE_NAME, "rb")
             self.classifier, self.features = pickle.load(file)
